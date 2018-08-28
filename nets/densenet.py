@@ -58,39 +58,38 @@ def densenet(images, num_classes=1001, is_training=False,
     end_points = {}
 
     with tf.variable_scope(scope, 'DenseNet', [images, num_classes]):
-        with slim.arg_scope(bn_drp_scope(is_training=is_training,
-                                         keep_prob=dropout_keep_prob)) as ssc:		 
+        with slim.arg_scope(bn_drp_scope(is_training=is_training,keep_prob=dropout_keep_prob)) as ssc:
 			#block1
-			net=slim.conv2d(images,16,[7,7],stride=2,padding='SAME',activation_fn=None,scope='conv1_7x7')
-			net=slim.max_pool2d(net,[3,3],stride=2,padding='SAME',scope='MaxPool_3x3')
-			net=block(net,6,growth,scope='block1')
-			end_points['block1'] = net
+            net=slim.conv2d(images,16,[7,7],stride=2,padding='SAME',activation_fn=None,scope='conv1_7x7')
+            net=slim.max_pool2d(net,[3,3],stride=2,padding='SAME',scope='MaxPool_3x3')
+            net=block(net,6,growth,scope='block1')
+            end_points['block1'] = net
 			
 			#block2
-			net=bn_act_conv_drp(net,reduce_dim(net),[1,1],scope='convTL1_1x1')
-			net=slim.avg_pool2d(net,[2,2],stride=2,padding='SAME',scope='AvgPool_2_2x2')
-			net=block(net,12,growth,scope='block2')
-			end_points['block2']= net
+            net=bn_act_conv_drp(net,reduce_dim(net),[1,1],scope='convTL1_1x1')
+            net=slim.avg_pool2d(net,[2,2],stride=2,padding='SAME',scope='AvgPool_2_2x2')
+            net=block(net,12,growth,scope='block2')
+            end_points['block2']= net
 			
 			#block3
-			net=bn_act_conv_drp(net,reduce_dim(net),[1,1],scope='convTL2_1x1')
-			net=slim.avg_pool2d(net,[2,2],stride=2,padding='SAME',scope='AvgPool_3_2x2')
-			net=block(net,24,growth,scope='block3')
-			end_points['block3']= net
+            net=bn_act_conv_drp(net,reduce_dim(net),[1,1],scope='convTL2_1x1')
+            net=slim.avg_pool2d(net,[2,2],stride=2,padding='SAME',scope='AvgPool_3_2x2')
+            net=block(net,24,growth,scope='block3')
+            end_points['block3']= net
 			
 			#block4
-			net=bn_act_conv_drp(net,reduce_dim(net),[1,1],scope='convTL3_1x1')
-			net=slim.avg_pool2d(net,[2,2],stride=2,padding='SAME',scope='AvgPool_4_2x2')
-			net=block(net,16,growth,scope='block4')
-			end_points['block4']= net
+            net=bn_act_conv_drp(net,reduce_dim(net),[1,1],scope='convTL3_1x1')
+            net=slim.avg_pool2d(net,[2,2],stride=2,padding='SAME',scope='AvgPool_4_2x2')
+            net=block(net,16,growth,scope='block4')
+            end_points['block4']= net
 			
-			net=slim.batch_norm(net,scope=scope+'last_bn')
-			net=tf.nn.relu(net)
-			net=slim.avg_pool2d(net,net.shape[1:3])
+            net=slim.batch_norm(net,scope=scope+'last_bn')
+            net=tf.nn.relu(net)
+            net=slim.avg_pool2d(net,net.shape[1:3])
 			
 			
-			bias = tf.constant_initialier(0.001)
-			logits = tf.squeeze(slim.conv2d(net,num_classes,[1,1],biases_initializer=bias))
+            bias = tf.constant_initialier(0.001)
+            logits = tf.squeeze(slim.conv2d(net,num_classes,[1,1],biases_initializer=bias))
             ##########################
             # Put your code here.
             ##########################
