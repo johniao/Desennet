@@ -88,7 +88,7 @@ def densenet(images, num_classes=1001, is_training=False,
             net=slim.avg_pool2d(net,net.shape[1:3])
 			
 			
-            bias = tf.constant_initialier(0.001)
+            bias = tf.constant_initializer(0.001)
             logits = tf.squeeze(slim.conv2d(net,num_classes,[1,1],biases_initializer=bias))
             ##########################
             # Put your code here.
